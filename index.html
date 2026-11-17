@@ -1,0 +1,90 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0b0820"><meta name="apple-mobile-web-app-capable" content="yes"><link rel="manifest" href="manifest.webmanifest"><title>DUEL ZONE</title>
+<style>
+:root{--bg:#0b0820;--card:#161233;--line:#2b2358;--p:#8b5cf6;--b:#3b82f6;--c:#22d3ee;--t:#eeeaff;--m:#9f98c9}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+body{background:radial-gradient(circle at 50% -10%,#2a1a6e,var(--bg) 60%) fixed;color:var(--t);font-family:system-ui,"Segoe UI",Tahoma,sans-serif;min-height:100dvh;padding:env(safe-area-inset-top) 0 calc(76px + env(safe-area-inset-bottom))}
+button{font:inherit;color:inherit;border:0;cursor:pointer;transition:.2s}
+.logo{font:900 34px/1 system-ui;letter-spacing:.12em;text-align:center;direction:ltr;background:linear-gradient(90deg,var(--c),var(--p),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 12px #8b5cf6aa);padding:18px 0 4px}
+#v{max-width:520px;margin:auto;padding:8px 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;margin:10px 0}
+.btn{background:linear-gradient(135deg,var(--p),var(--b));padding:13px 18px;border-radius:14px;font-weight:700;width:100%;box-shadow:0 0 18px #6d4cff66;margin-top:6px}
+.seg{display:flex;gap:8px}.seg button{flex:1;padding:10px;border-radius:12px;background:#1d1745;border:1px solid var(--line)}.seg .on{border-color:var(--c);box-shadow:0 0 10px #22d3ee55}
+.gl{display:grid;grid-template-columns:1fr 1fr;gap:10px}.gc{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 8px;text-align:center}.gc:hover,.gc:active{border-color:var(--p);transform:translateY(-2px)}.gc b{display:block;font-size:32px;margin-bottom:6px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;direction:ltr;max-width:320px;margin:14px auto}.cell{aspect-ratio:1;background:#1d1745;border-radius:14px;font-size:44px;font-weight:900}.cell.x{color:var(--c)}.cell.o{color:#f472b6}
+.grid7{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;direction:ltr;background:#2a2a8a;padding:8px;border-radius:16px;margin:14px 0}.disc{aspect-ratio:1;border-radius:50%;background:var(--bg)}.d1{background:#ef4444;box-shadow:0 0 8px #ef4444}.d2{background:#facc15;box-shadow:0 0 8px #facc15}
+.st,.sc{text-align:center;color:var(--m);margin:8px}.q{text-align:center;font-size:40px;margin:20px 0;direction:ltr}
+.ops{display:grid;grid-template-columns:1fr 1fr;gap:10px}.ops button,.pick{background:#1d1745;border:1px solid var(--line);border-radius:14px;padding:16px;font-size:22px}.row{display:flex;gap:10px;justify-content:center}.pick{font-size:40px}.pick small{display:block;font-size:12px;color:var(--m)}
+.pad{width:100%;height:42vh;border-radius:22px;font-size:22px;font-weight:800;background:#1d1745}.pad.red{background:#b91c1c}.pad.green{background:#16a34a}
+nav{position:fixed;bottom:0;inset-inline:0;display:flex;background:#100c2acc;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}nav[hidden]{display:none}nav button{flex:1;padding:10px;background:none;color:var(--m);font-size:12px}nav button b{display:block;font-size:20px}nav .on{color:var(--c)}
+.ov{position:fixed;inset:0;background:#05031acc;display:grid;place-items:center;z-index:9}.ov .card{width:min(86vw,340px);text-align:center}
+.bar{height:8px;background:#1d1745;border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--c),var(--p))}
+input{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:#1d1745;color:var(--t);font:inherit}
+.av{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}.av button{font-size:26px;padding:6px;border-radius:12px;background:#1d1745;border:2px solid transparent}.av .on{border-color:var(--c)}
+.hr{display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}.rw{color:#4ade80}.rl{color:#f87171}.rd{color:#facc15}
+button:focus-visible,input:focus-visible{outline:2px solid var(--c);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+<div class="logo">DUEL ZONE</div><div id="v"></div>
+<nav hidden><button data-p="home"><b>🎮</b>الألعاب</button><button data-p="prof"><b>🏆</b>سجلي</button><button data-p="set"><b>⚙️</b>الإعدادات</button></nav>
+<script>
+const $=s=>document.querySelector(s),E=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e},esc=s=>s.replace(/[&<>"]/g,c=>'&#'+c.charCodeAt(0)+';');
+let S={name:'',av:'🦊',xp:0,w:0,l:0,d:0,hist:[],snd:1},T=[],ac;
+try{Object.assign(S,JSON.parse(localStorage.getItem('dz')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('dz',JSON.stringify(S))}catch(e){}},lvl=()=>Math.floor(S.xp/100)+1,clr=()=>{T.forEach(clearTimeout);T=[]};
+const beep=(f,d=.12)=>{if(!S.snd)return;try{ac=ac||new(window.AudioContext||webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=f;g.gain.value=.08;o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+d)}catch(e){}};
+const AV=['🦊','🐯','🦁','🐺','🐼','🦅','🐲','👾','🤖','👑','🔥','⚡'];
+const GAMES=[{id:'ttt',n:'إكس أو',i:'❌',m:2},{id:'rps',n:'حجر ورقة مقص',i:'✊',m:2},{id:'c4',n:'أربعة على التوالي',i:'🔴',m:2},{id:'math',n:'تحدي الرياضيات',i:'➕',m:1},{id:'rx',n:'سرعة رد الفعل',i:'⚡',m:1}];
+const v=$('#v');
+function go(p){clr();document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.p==p));v.innerHTML='';({home,prof,set})[p]()}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>go(b.dataset.p));
+function reg(){let av=AV[0];v.innerHTML=`<div class=card><h2 style="text-align:center">أهلاً بك في الحلبة</h2><p class=st>اختر اسمك وصورتك</p><input id=nm maxlength=14 placeholder="اسم اللاعب"><br><br><div class=av>${AV.map((a,i)=>`<button class="${i?'':'on'}">${a}</button>`).join('')}</div><br><button class=btn id=ok>ادخل</button></div>`;
+v.querySelectorAll('.av button').forEach(b=>b.onclick=()=>{v.querySelectorAll('.av button').forEach(x=>x.classList.remove('on'));b.classList.add('on');av=b.textContent});
+$('#ok').onclick=()=>{const n=$('#nm').value.trim();if(n.length<2)return $('#nm').focus();S.name=n;S.av=av;save();$('nav').hidden=false;go('home')}}
+function home(){const pr=S.xp%100;v.innerHTML=`<div class=card style="display:flex;gap:12px;align-items:center"><div style="font-size:44px">${S.av}</div><div style="flex:1"><b>${esc(S.name)}</b> · المستوى ${lvl()}<div class=bar style="margin-top:8px"><i style="width:${pr}%"></i></div><small style="color:var(--m)">${pr}/100 XP</small></div></div><div class=gl>${GAMES.map(g=>`<button class=gc data-g=${g.id}><b>${g.i}</b>${g.n}</button>`).join('')}</div>`;v.querySelectorAll('.gc').forEach(b=>b.onclick=()=>setup(b.dataset.g))}
+function prof(){const t=S.w+S.l+S.d,A=[['🥇','أول فوز',S.w>=1],['🔥','خمسة انتصارات',S.w>=5],['⭐','المستوى 5',lvl()>=5],['🎮','عشر مباريات',t>=10]],R={w:'فوز',l:'خسارة',d:'تعادل'};
+v.innerHTML=`<div class=card><div class=row style="justify-content:space-around;text-align:center"><div><b class=rw>${S.w}</b><br>فوز</div><div><b class=rl>${S.l}</b><br>خسارة</div><div><b class=rd>${S.d}</b><br>تعادل</div><div><b>${t}</b><br>مباريات</div></div></div><div class=card><b>الإنجازات</b><div class=row style="margin-top:10px;flex-wrap:wrap">${A.map(a=>`<span style="opacity:${a[2]?1:.3};text-align:center;width:70px;font-size:12px"><span style="font-size:30px">${a[0]}</span><br>${a[1]}</span>`).join('')}</div></div><div class=card><b>آخر المباريات</b>${S.hist.length?S.hist.map(h=>`<div class=hr><span>${h.g} · ${h.o}</span><span class=r${h.r}>${R[h.r]}</span><small>${h.d}</small></div>`).join(''):'<p class=st>لا توجد مباريات بعد. ابدأ أول تحدٍّ!</p>'}</div>`}
+function set(){v.innerHTML=`<div class=card><div class=seg><button id=s1 class="${S.snd?'on':''}">🔊 الصوت</button><button id=s0 class="${S.snd?'':'on'}">🔇 كتم</button></div></div><div class=card><p class=st>بياناتك محفوظة على هذا الجهاز فقط، واللعبة تعمل بدون إنترنت.</p><button class=btn id=rs style="background:#7f1d1d;box-shadow:none">مسح كل البيانات</button></div>`;
+$('#s1').onclick=()=>{S.snd=1;save();set()};$('#s0').onclick=()=>{S.snd=0;save();set()};$('#rs').onclick=()=>{if(confirm('سيتم حذف حسابك وكل إحصائياتك. متأكد؟')){try{localStorage.removeItem('dz')}catch(e){}location.reload()}}}
+function setup(id){const g=GAMES.find(x=>x.id==id);let mode='ai',hard=0;v.innerHTML=`<div class=card><h2 style="text-align:center">${g.i} ${g.n}</h2>${g.m==2?'<p class=st>الخصم</p><div class=seg id=m><button class=on data-v=ai>ذكاء اصطناعي</button><button data-v=p2>صديق (نفس الهاتف)</button></div>':''}<p class=st>الصعوبة</p><div class=seg id=h><button class=on data-v=0>سهل</button><button data-v=1>صعب</button></div><br><button class=btn id=go>ابدأ</button></div>`;
+const seg=(s,f)=>$(s)&&$(s).querySelectorAll('button').forEach(b=>b.onclick=()=>{$(s).querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');f(b.dataset.v)});
+seg('#m',x=>mode=x);seg('#h',x=>hard=+x);$('#go').onclick=()=>play(id,mode,hard)}
+function play(id,mode,hard){clr();const g=GAMES.find(x=>x.id==id);v.innerHTML='<h3 class=st id=t></h3><div id=bx></div><button class=btn style="background:#1d1745;box-shadow:none;margin-top:14px" id=bk>رجوع</button>';$('#bk').onclick=()=>go('home');$('#t').textContent=g.n;
+({ttt,rps,c4,math,rx})[id]({mode,hard,box:$('#bx'),after:(ms,f)=>T.push(setTimeout(f,ms)),end:(r,m)=>finish(id,mode,hard,r,m)})}
+function finish(id,mode,hard,r,msg){const g=GAMES.find(x=>x.id==id),o=lvl(),xp=r=='w'?30:r=='d'?10:5;S.xp+=xp;S[r]++;S.hist.unshift({g:g.n,o:mode=='ai'?'ذكاء اصطناعي':'صديق',r,d:new Date().toLocaleDateString('ar')});S.hist.length=Math.min(S.hist.length,30);save();beep(r=='w'?880:r=='d'?520:220,.4);
+const ov=E('div','ov',`<div class=card><div style="font-size:54px">${r=='w'?'🏆':r=='d'?'🤝':'💀'}</div><h2>${r=='w'?'فزت!':r=='d'?'تعادل':'خسرت'}</h2><p class=st>${msg}</p><p class=rw>+${xp} XP${lvl()>o?' · ارتفع مستواك إلى '+lvl():''}</p><button class=btn id=ag>العب مرة أخرى</button><button class=btn id=hm style="background:#1d1745;box-shadow:none">الرئيسية</button></div>`);document.body.append(ov);
+$('#ag').onclick=()=>{ov.remove();play(id,mode,hard)};$('#hm').onclick=()=>{ov.remove();go('home')}}
+/* ===== الألعاب ===== */
+function ttt(g){let b=Array(9).fill(''),t='X',over=0;const W=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]],win=(b,p)=>W.some(w=>w.every(i=>b[i]==p)),st=E('p','st'),gr=E('div','grid3'),who=g.mode=='ai'?'فاز الخصم':'فاز اللاعب 2';g.box.append(st,gr);
+const mm=(b,p)=>{if(win(b,'O'))return 1;if(win(b,'X'))return -1;if(b.every(x=>x))return 0;let best=p=='O'?-2:2;b.forEach((x,i)=>{if(!x){b[i]=p;const s=mm(b,p=='O'?'X':'O');b[i]='';best=p=='O'?Math.max(best,s):Math.min(best,s)}});return best};
+const ai=()=>{const e=b.map((x,i)=>x?-1:i).filter(i=>i>=0);if(!g.hard||Math.random()<.15)return e[Math.random()*e.length|0];let bs=-2,bi=e[0];e.forEach(i=>{b[i]='O';const s=mm(b,'X');b[i]='';if(s>bs){bs=s;bi=i}});return bi};
+const draw=()=>{gr.innerHTML='';b.forEach((x,i)=>{const c=E('button','cell '+(x=='X'?'x':'o'),x);c.onclick=()=>mv(i);gr.append(c)});st.textContent=over?'':t=='X'?'دورك (X)':g.mode=='ai'?'الخصم يفكر…':'دور اللاعب 2 (O)'};
+const mv=i=>{if(over||b[i]||(g.mode=='ai'&&t=='O'))return;b[i]=t;beep(500);chk()};
+const chk=()=>{if(win(b,t)){over=1;draw();return g.end(t=='X'?'w':'l',t=='X'?'ثلاثة في صف!':who)}if(b.every(x=>x)){over=1;draw();return g.end('d','لا فائز هذه المرة')}t=t=='X'?'O':'X';draw();if(g.mode=='ai'&&t=='O')g.after(600,()=>{b[ai()]='O';beep(380);chk()})};draw()}
+function c4(g){const R=6,C=7;let b=Array.from({length:R},()=>Array(C).fill(0)),t=1,over=0;const st=E('p','st'),gr=E('div','grid7'),who=g.mode=='ai'?'فاز الخصم':'فاز اللاعب 2';g.box.append(st,gr);
+const cp=b=>b.map(r=>[...r]),ok=b=>[...Array(C).keys()].filter(c=>!b[0][c]),drop=(b,c,p)=>{for(let r=R-1;r>=0;r--)if(!b[r][c]){b[r][c]=p;return r}};
+const win=(b,p)=>{for(let r=0;r<R;r++)for(let c=0;c<C;c++)for(const[dr,dc]of[[0,1],[1,0],[1,1],[1,-1]]){let k=0;while(k<4){const y=r+dr*k,x=c+dc*k;if(y<0||y>=R||x<0||x>=C||b[y][x]!=p)break;k++}if(k==4)return 1}return 0};
+const ai=()=>{const e=ok(b);if(!g.hard)return e[Math.random()*e.length|0];for(const p of[2,1])for(const c of e){const x=cp(b);drop(x,c,p);if(win(x,p))return c}
+const s=e.filter(c=>{const x=cp(b);drop(x,c,2);return !ok(x).some(d=>{const y=cp(x);drop(y,d,1);return win(y,1)})}),l=s.length?s:e;return l.sort((a,z)=>Math.abs(a-3)-Math.abs(z-3)+Math.random()-.5)[0]};
+const draw=()=>{gr.innerHTML='';b.forEach(r=>r.forEach((x,c)=>{const e=E('button','disc d'+x);e.onclick=()=>mv(c);gr.append(e)}));st.textContent=over?'':t==1?'دورك (الأحمر)':g.mode=='ai'?'الخصم يفكر…':'دور اللاعب 2 (الأصفر)'};
+const mv=c=>{if(over||b[0][c]||(g.mode=='ai'&&t==2))return;drop(b,c,t);beep(420);chk()};
+const chk=()=>{if(win(b,t)){over=1;draw();return g.end(t==1?'w':'l',t==1?'أربعة على التوالي!':who)}if(!ok(b).length){over=1;draw();return g.end('d','اللوحة امتلأت')}t=3-t;draw();if(g.mode=='ai'&&t==2)g.after(600,()=>{drop(b,ai(),2);beep(330);chk()})};draw()}
+function rps(g){const M=['✊','✋','✌️'],N=['حجر','ورقة','مقص'],o=g.mode=='ai'?'الخصم':'اللاعب 2';let s=[0,0],p1=null,h=[0,0,0];const st=E('p','st'),sc=E('p','sc'),row=E('div','row');g.box.append(sc,st,row);
+const draw=m=>{sc.textContent=`أنت ${s[0]} — ${s[1]} ${o} (الأول إلى 3)`;row.innerHTML='';st.textContent=m||'اختر';M.forEach((x,i)=>{const b=E('button','pick',x+'<small>'+N[i]+'</small>');b.onclick=()=>pick(i);row.append(b)})};
+const res=(a,b)=>{p1=null;const d=(a-b+3)%3;d==1?s[0]++:d==2?s[1]++:0;if(s[0]==3)return g.end('w',`${s[0]} — ${s[1]}`);if(s[1]==3)return g.end('l',`${s[0]} — ${s[1]}`);draw(`${M[a]} ضد ${M[b]}: ${d==0?'تعادل':d==1?'نقطة لك':'نقطة لـ'+o}`)};
+const pick=i=>{beep(500);if(g.mode=='p2'){if(p1===null){p1=i;return draw('مرر الهاتف للاعب 2 ثم اختر')}return res(p1,i)}let a=Math.random()*3|0;if(g.hard&&Math.random()<.6)a=(h.indexOf(Math.max(...h))+1)%3;h[i]++;res(i,a)};draw()}
+function math(g){let n=0,s=[0,0],id,done;const sc=E('p','sc'),q=E('h2','q'),ops=E('div','ops');g.box.append(sc,q,ops);
+const next=()=>{if(n==7)return g.end(s[0]>s[1]?'w':s[0]<s[1]?'l':'d',`${s[0]} — ${s[1]}`);n++;done=0;sc.textContent=`سؤال ${n}/7 · أنت ${s[0]} — الخصم ${s[1]}`;
+const a=2+(Math.random()*(g.hard?30:15)|0),b=2+(Math.random()*(g.hard?12:9)|0),o=['+','-','×'][Math.random()*3|0],r=o=='+'?a+b:o=='-'?a-b:a*b;q.textContent=`${a} ${o} ${b} = ؟`;
+const set=new Set([r]);while(set.size<4)set.add(r+(1+(Math.random()*9|0))*(Math.random()<.5?-1:1));ops.innerHTML='';
+[...set].sort(()=>Math.random()-.5).forEach(x=>{const k=E('button','',x);k.onclick=()=>{if(done)return;done=1;clearTimeout(id);x==r?s[0]++:s[1]++;beep(x==r?660:200);g.after(500,next)};ops.append(k)});
+id=setTimeout(()=>{if(done)return;done=1;s[1]++;beep(200);sc.textContent='الخصم أسرع!';g.after(700,next)},(g.hard?2500:6000)+Math.random()*2500);T.push(id)};next()}
+function rx(g){let n=0,s=[0,0],st='idle',t0,id;const sc=E('p','sc'),pad=E('button','pad','اضغط للبدء');g.box.append(sc,pad);
+const show=()=>sc.textContent=`جولة ${Math.min(n+1,3)}/3 · أنت ${s[0]} — الخصم ${s[1]}`;
+const fin=()=>{if(n==3)return g.end(s[0]>s[1]?'w':s[0]<s[1]?'l':'d',`${s[0]} — ${s[1]}`);st='idle';pad.className='pad';pad.textContent='اضغط للجولة التالية'};
+const round=(w,m)=>{w?s[0]++:s[1]++;n++;show();pad.className='pad';pad.textContent=m;st='lock';g.after(1500,fin)};
+pad.onclick=()=>{if(st=='idle'){st='wait';pad.className='pad red';pad.textContent='انتظر اللون الأخضر…';id=setTimeout(()=>{st='go';t0=performance.now();pad.className='pad green';pad.textContent='اضغط الآن!'},1500+Math.random()*2500);T.push(id)}
+else if(st=='wait'){clearTimeout(id);round(0,'ضغطت مبكراً!')}
+else if(st=='go'){const ms=performance.now()-t0|0,ai=(g.hard?230:420)+(Math.random()*120|0);round(ms<ai,`أنت ${ms}ms · الخصم ${ai}ms`)}};show()}
+$('nav').hidden=!S.name;S.name?go('home'):reg();
+if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script></body></html>
